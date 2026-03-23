@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+
+*_layout.txt
+*_extracted.xlsx
+ocr_images/
+ocr_images_fevrier/
+ocr_images_fevrier_400/
+attijari_ocr_images/
+awb_ocr_images/
+
+*.pdf
+*.PDF
+*.png
+*.jpg
+

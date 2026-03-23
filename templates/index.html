@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Extraction de relevés bancaires</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-brand">
+          <img class="hero-logo" src="{{ url_for('logo_srm') }}" alt="Logo Société Régionale Multiservices">
+          <div class="hero-badge">SRM-CS</div>
+          <p class="eyebrow">Société Régionale Multiservices</p>
+        </div>
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <h1>Extraction de relevés bancaires au format Excel.</h1>
+            <p class="intro">
+              Déposez un relevé PDF, choisissez sa famille de document et récupérez un fichier Excel
+              structuré avec vérification automatique des totaux avant téléchargement.
+            </p>
+            <div class="hero-pills">
+              <span>AWB</span>
+              <span>SRM</span>
+              <span>CDM</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form class="upload-form" action="{{ url_for('extraire') }}" method="post" enctype="multipart/form-data">
+          <label class="field">
+            <span>Type de relevé</span>
+            <select name="statement_type" required>
+              <option value="" selected disabled>Choisir un type</option>
+              <option value="awb">{{ type_labels["awb"] }}</option>
+              <option value="srm">{{ type_labels["srm"] }}</option>
+              <option value="cdm">{{ type_labels["cdm"] }}</option>
+            </select>
+          </label>
+
+          <label class="dropzone" id="dropzone">
+            <input id="statement_file" type="file" name="statement_file" accept=".pdf,application/pdf" required>
+            <span class="dropzone-title">Glissez votre PDF ici</span>
+            <span class="dropzone-subtitle">ou cliquez pour sélectionner un fichier</span>
+            <span class="dropzone-note" id="file-name">Aucun fichier sélectionné</span>
+          </label>
+
+          <button class="submit-button" type="submit">Générer le fichier Excel</button>
+        </form>
+      </section>
+
+      <footer class="site-footer">
+        <span>Fait par EL MAHBOUBI Abderrahim</span>
+        <span>elmahboubi@onee.ma</span>
+      </footer>
+    </main>
+
+    <script>
+      const input = document.getElementById("statement_file");
+      const fileName = document.getElementById("file-name");
+      const dropzone = document.getElementById("dropzone");
+
+      input.addEventListener("change", () => {
+        fileName.textContent = input.files.length ? input.files[0].name : "Aucun fichier sélectionné";
+      });
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropzone.classList.add("is-active");
+        });
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropzone.classList.remove("is-active");
+        });
+      });
+    </script>
+  </body>
+  </html>

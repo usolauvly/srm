@@ -1,0 +1,258 @@
+:root {
+  --bg: #eef6fb;
+  --bg-accent: #ffffff;
+  --panel: rgba(255, 255, 255, 0.94);
+  --text: #173248;
+  --muted: #527086;
+  --line: rgba(37, 113, 167, 0.18);
+  --primary: #3497d1;
+  --primary-dark: #2675a8;
+  --green: #56bb57;
+  --orange: #f39b39;
+  --success: #1f6a4b;
+  --error: #8e241a;
+  --shadow: 0 28px 60px rgba(40, 94, 137, 0.14);
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.page {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 64px;
+}
+
+.hero {
+  position: relative;
+  padding: 12px 0 28px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--primary-dark);
+}
+
+.hero-brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.hero-logo {
+  width: 110px;
+  height: auto;
+  display: block;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 94px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+}
+
+.intro {
+  margin: 18px 0 0;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.hero-pills span {
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(52, 151, 209, 0.16);
+  background: var(--bg-accent);
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.panel {
+  margin-top: 28px;
+  padding: 30px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.upload-form {
+  display: grid;
+  gap: 20px;
+}
+
+.field {
+  display: grid;
+  gap: 10px;
+}
+
+.field span,
+.info-grid h2 {
+  font-weight: 700;
+}
+
+select,
+.submit-button {
+  min-height: 56px;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+select {
+  width: 100%;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+}
+
+.dropzone {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 40px 24px;
+  border: 2px dashed rgba(163, 74, 30, 0.34);
+  border-color: rgba(52, 151, 209, 0.32);
+  border-radius: 10px;
+  background: #fff;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.dropzone:hover,
+.dropzone.is-active {
+  transform: translateY(-1px);
+  border-color: var(--primary);
+  background: #f7fbff;
+}
+
+.dropzone input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dropzone-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.dropzone-subtitle,
+.dropzone-note,
+.message {
+  color: var(--muted);
+}
+
+.dropzone-note {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(52, 151, 209, 0.08);
+}
+
+.submit-button {
+  padding: 0 22px;
+  border: 0;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 140ms ease, filter 140ms ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.message {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.message.erreur {
+  color: var(--error);
+  border-color: rgba(142, 36, 26, 0.2);
+  background: rgba(255, 240, 238, 0.9);
+}
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 0 2px;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.95em;
+}
+
+@media (max-width: 820px) {
+  .page {
+    width: min(100% - 20px, 1120px);
+    padding-top: 28px;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
