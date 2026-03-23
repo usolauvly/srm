@@ -68,12 +68,18 @@ def parse_amount_space(text: str) -> Decimal:
 
 
 def extract_text(input_pdf: Path) -> list[str]:
-    result = subprocess.run(
-        ["pdftotext", "-layout", str(input_pdf), "-"],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            ["pdftotext", "-layout", str(input_pdf), "-"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError as exc:
+        raise RuntimeError(
+            "Le binaire systeme 'pdftotext' est introuvable. "
+            "Ce projet depend de Poppler et ne peut pas extraire le PDF sans cet outil."
+        ) from exc
     return result.stdout.splitlines()
 
 
