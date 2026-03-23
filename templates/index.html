@@ -10,7 +10,7 @@
     <main class="page">
       <section class="hero">
         <div class="hero-brand">
-          <img class="hero-logo" src="{{ url_for('logo_srm') }}" alt="Logo Société Régionale Multiservices">
+          <img class="hero-logo" src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logo Société Régionale Multiservices">
           <div class="hero-badge">SRM-CS</div>
           <p class="eyebrow">Société Régionale Multiservices</p>
         </div>
@@ -72,9 +72,11 @@
       const fileName = document.getElementById("file-name");
       const dropzone = document.getElementById("dropzone");
 
-      input.addEventListener("change", () => {
+      function refreshFileName() {
         fileName.textContent = input.files.length ? input.files[0].name : "Aucun fichier sélectionné";
-      });
+      }
+
+      input.addEventListener("change", refreshFileName);
 
       ["dragenter", "dragover"].forEach((eventName) => {
         dropzone.addEventListener(eventName, (event) => {
@@ -88,6 +90,15 @@
           event.preventDefault();
           dropzone.classList.remove("is-active");
         });
+      });
+
+      dropzone.addEventListener("drop", (event) => {
+        const files = event.dataTransfer.files;
+        if (!files || !files.length) {
+          return;
+        }
+        input.files = files;
+        refreshFileName();
       });
     </script>
   </body>

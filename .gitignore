@@ -14,4 +14,4 @@ awb_ocr_images/
 *.PDF
 *.png
 *.jpg
-
+!logo.jpeg

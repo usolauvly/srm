@@ -54,11 +54,6 @@ def index() -> str:
     return render_template("index.html", type_labels=LABEL_BY_TYPE)
 
 
-@app.route("/logo-srm.jpeg")
-def logo_srm():
-    return send_file(BASE_DIR / "logo.jpeg", mimetype="image/jpeg")
-
-
 @app.route("/extraire", methods=["POST"])
 def extraire():
     selected_type = request.form.get("statement_type", "").strip().lower()
