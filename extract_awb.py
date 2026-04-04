@@ -10,7 +10,7 @@ from pathlib import Path
 
 import openpyxl
 
-AMOUNT_RE = re.compile(r"(?:\d{1,3}(?: \d{3})*|\d+),\d{2}")
+AMOUNT_RE = re.compile(r"(?:\d{1,3}(?: \d{3})*|\d+|),\d{2}")
 ENTRY_RE = re.compile(
     r"^([0-9A-Z]{6})\s+(\d{2})\s+(\d{2})\s+(.*?)\s*(\d{2}\s+\d{2}\s+\d{4})(.*)$"
 )
@@ -24,6 +24,8 @@ TOTAL_RE = re.compile(
     r"TOTAL MOUVEMENTS\s+((?:\d{1,3}(?: \d{3})*|\d+),\d{2})\s+((?:\d{1,3}(?: \d{3})*|\d+),\d{2})"
 )
 AMOUNT_COLUMN_SPLIT = 130
+SHIFTED_CREDIT_COLUMN_SPLIT = 122
+SHIFTED_CREDIT_TAIL_SPLIT = 62
 
 
 @dataclass
@@ -49,11 +51,21 @@ def default_output_path(input_pdf: Path) -> Path:
 
 
 def parse_amount(text: str) -> Decimal:
+    if text.startswith(","):
+        text = f"0{text}"
     return Decimal(text.replace(" ", "").replace(",", "."))
 
 
 def signed_balance(amount: Decimal, status: str) -> Decimal:
     return amount if status == "CREDITEUR" else -amount
+
+
+def is_credit_amount(line_match: re.Match[str], amount_match: re.Match[str]) -> bool:
+    amount_column = line_match.start(6) + amount_match.start()
+    tail_gap = amount_match.start()
+    if amount_column >= AMOUNT_COLUMN_SPLIT:
+        return True
+    return amount_column >= SHIFTED_CREDIT_COLUMN_SPLIT and tail_gap >= SHIFTED_CREDIT_TAIL_SPLIT
 
 
 def extract_text(input_pdf: Path) -> list[str]:
@@ -139,7 +151,7 @@ def main() -> None:
         if not match:
             continue
 
-        amount_match = AMOUNT_RE.search(line)
+        amount_match = AMOUNT_RE.search(match.group(6))
         if amount_match is None:
             continue
 
@@ -147,14 +159,15 @@ def main() -> None:
         value_date = " ".join(match.group(5).split())
         value_day, value_month, value_year = value_date.split()
         amount = parse_amount(amount_match.group(0))
+        is_credit = is_credit_amount(match, amount_match)
 
         entries.append(
             Entry(
                 date=f"{op_day}/{op_month}/{value_year}",
                 valeur=f"{value_day}/{value_month}/{value_year}",
                 libelle=" ".join(match.group(4).split()),
-                debit=amount if amount_match.start() < AMOUNT_COLUMN_SPLIT else Decimal("0"),
-                credit=amount if amount_match.start() >= AMOUNT_COLUMN_SPLIT else Decimal("0"),
+                debit=Decimal("0") if is_credit else amount,
+                credit=amount if is_credit else Decimal("0"),
             )
         )
 
